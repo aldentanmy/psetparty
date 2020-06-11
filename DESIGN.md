@@ -1,0 +1,50 @@
+Our database consists of the following tables:
+- “users”: keep track of all users and their username, password (hash), email, cellphone number
+- “class_list”: keep track of all classes available to be chosen
+- “classes”: keep track of the classes that a user is taking
+- “updates”: contains all the availability entries of all users
+
+The route “/” shows the user’s own homepage which will display the user’s classes and contact details by calling on the relevant SQLite tables “classes” and “users”.
+
+The route “/classcalendar” shows the availabilities of users in that class. We rendered the same template classcalendar.html for different classes, simply changing the title in the template and
+calling the relevant portion of the SQLite tables. The classname was appended to the route when the user wanted to visit the classcalendar of a specific class, and that classname was then used to search the SQLite tables for the relevant values.
+
+As the “updates” table only contained user’s user_id but not their username, we needed to combine the “updates” table with the “users” table on the common column user_id, so that we may access all the relevant elements of the “updates” table together with the users’ usernames and render them together using a loop in Jinja in classcalendar.html.
+
+For the classcalendar, we also implemented the green dot function to indicate whether the current user is online. The user activates the green dot (to signal online) or the red dot (to signal offline) by clicking the PSet On or PSet Off button. The button will only be displayed if the day of that availability session is the same as the current day, in US time. The user_id of the availability entry also has to match that of the current user as the user should only be able to change the color of the button for entries that belong to him/her. Thus, these conditions had to be implemented and it was done so in Jinja. However, for the condition regarding the date, the IDE uses a different timezone from the US, so a conversion had to be done via the “checkdate” function which was declared in Python. This function was called in Jinja via app.jinja_env.filters.
+
+The route “/classhomepage” displays the list of all students in the class so users can easily find and access the contact details of other users taking the same class.
+
+The route “/classupdate” allows users to update their availabilities to pset together with other users. A form was implemented to obtain the users’ input, thereafter added into the “updates” table, and finally rendering the relevant classcalendar which would call on the relevant elements in the “updates” table. Both client-side validation (in Javascript) and server-side validation (in Python) was performed to ensure that all requisite fields are filled up, even if the user has disabled Javascript in his/her browser or if Javascript somehow fails.
+
+For the 3 class-related pages (classhomepage, classcalendar and classupdate), we removed the “Update Availability” tab in the navbar to prevent users from updating their pset availabilities if they haven’t added the class yet. We did so by implementing an if condition in the relevant html pages using Jinja (client-side). We also implemented a check server-side by returning the apology page if the user and corresponding class was not found in the “classes” table.
+
+We also used a similar if condition to display an “Add Class” button on the class-related pages if the user hasn’t added the classes, and removed the button if the user has already added the class.
+
+The route “/check” performs a server-side validation that a username has not been taken during registration on the form in register.html. This check is done using Ajax and JSON.
+
+The route “/deleteupdate” allows the user to delete a particular entry in the classcalendar that was added by the same user. This is implemented via a delete button in the classcalendar to allow the user to easily delete an entry from the whole list. Each delete button is embedded in a form which sends a POST request to the “/deleteupdate” route, appended with the id of the availability entry in the “updates” table. Whenever the button is clicked, the relevant entry will be identified by its id, and then deleted from the table. A condition also has to be passed in classcalendar.html via Jinja that checks whether the user_id of the current user matches the student_id of the availability entry, and if and only if this condition is true, then the button will be rendered. This is to prevent users form deleting the entries of other users.
+
+The route “/deleteclass” allows the user to delete a particular class in his homepage index.html. Similar to “/deleteupdate”, this is implemented via a delete button in index.html and appears beside each class listed in the homepage. Each delete button is also embedded in a form tag which is appended with the classname of the relevant class, which allows the relevant row in the “classes” table to be deleted. An additional functionality implemented here would be that when a class is deleted, the relevant availabilities belonging to that user and that class will also be deleted, since it does not make sense for a user to have pset sessions in a class they are no longer taking. Thus, the deleteclass function also deletes from the “updates” table.
+
+The route “/friend” allows users to access another user’s homepage. It is similar to “/” where the relevant classes and contact information of the target user are obtained from the SQLite tables. This route can be accessed via any clicking on a student’s name in any classhomepage which displays the list of students in that class. The student’s name will be hyperlinked to this “friend” route which is appended by the friend’s user_id.
+
+One problem we encountered was that if a user clicks on his own name, then his homepage will be rendered, but in the friend.html layout rather than the desired index.html user homepage. Thus, we added a condition that checks if the current user’s user_id matches the user_id of the target user. If so, the user will be redirected to “/” which renders index.html, his homepage, rather than friend.html.
+
+The route “/search” allows users to search for classes in the form search.html. After the form is submitted via the POST request, a search on the database is then carried out using SQLite. We wanted the user to be able to search for classes by typing any substring of the classname. For example, to search for any computer science classes, the user can type in “CPSC” instead of the specific CPSC classname (eg. “CPSC100”). Similarly, if the user types in “C”, for example, all classes with the letter “C” will show as a search result in searched.html, be it “ECON110” or “PSYC110”. Searches were also case-insensitive, so the same results would appear if the user types “c”. These were all carried out using the “LIKE” operator and the “%insert search request%” syntax in the SQLite search, where the % signs indicate the search results can include any string that precedes or succeeds the search request.
+
+The route “/register” allows a user to register for a new account. Here, server-side validation in Python is implemented to check that all fields are filled in and that a username has not been already taken. This check serves as a back-up to “/check” which performs the validation using Ajax and relies on a request being sent in Javascript in register.html. If the Javascript fails, then the server-side validation in “/register” will still prevent a user from registering with an existing username.
+
+The route “/changepw” allows the user to change his/her password by typing a new password twice in the form in changepw.html. Both server-side and client-side validation was used here to ensure that both fields are filled in and matching before the hash element in the “users” table was updated.
+
+The route “/pset_on” is called in classcalendar.html via a button that is embedded in a form which submits the form to /pset_on via a POST request. This button is only displayed for availability entries that belong to the user, and match the current day. When the button is clicked, the “active” element in the table “updates” for that entry is changed from 0 to 1. When classcalendar.html is rendered, a green button will appear beside a user’s name if his/her active value is 1.
+
+Similarly, “/pset_off” allows the user to change the green button to a red button by clicking the button “PSet Off”, which sets the “active” element to 0.
+
+An email functionality is also implemented in the “/email” route. The SMTP (Simple Mail Transfer Protocol) library and documentation for Gmail taught us how to log into Gmail’s server programmatically and send an email. This allows users to send an email to another user via an email button in the target user’s homepage. The user can input a subject and a message, and an email will be sent to the target user’s email, using an email account that our group created, called yalepsetparty@gmail.com.
+
+We did not want to allow users to send the email via their own accounts as that would require them to enter their email passwords in our website, but they might not feel safe doing so. Thus, using a separately created email overcomes this concern, and the user’s email password will also not have traces in our server which would pose security concerns.
+
+In case the sender did not identify himself/herself in the email, we automatically appended the sender’s email address at the end of the email’s body, so the target user can identify who sent the email.
+
+The route “/addclass” allows a user to add a class to his/her user homepage so that he/she can easily access the classes he/she belongs to, and also start adding availabilities to pset. We decided to implement this in searched.html so the user can easily add classes from the search results from “/search”, where each search result had a customized “Add Class” button beside it. We felt this is more convenient if a user would like to add multiple classes. To make things even more convenient, we also had an add class button in each class’ classhomepage.
