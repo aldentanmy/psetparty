@@ -1,0 +1,129 @@
+body
+{
+    background-color: lightblue;
+    background-size: 3000px 1500px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    text-align: center;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 20px;
+}
+
+h1
+{
+    font-size: 40px;
+    font-weight: bold;
+    font-style: oblique;
+    font-variant: small-caps;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+
+nav
+{
+    background-image: url("nav_bg.jpg");
+    min-height : 100%;
+    min-width : 100%;
+    background-size:100%;
+    background-repeat:no-repeat;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+nav .navbar-nav
+{
+    font-size: 19px;
+    font-weight: bold;
+    font-variant: small-caps;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    color: black;
+}
+
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: 30px;
+    font-style: oblique;
+    font-weight: 900;
+    font-variant: small-caps;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+/* colors for brand */
+nav .navbar-brand .blue
+{
+    color: #537fbe;
+}
+nav .navbar-brand .red
+{
+    color: #ea433b;
+}
+nav .navbar-brand .yellow
+{
+    color: #f5b82e;
+}
+nav .navbar-brand .green
+{
+    color: #2e944b;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+.active-dot
+{
+    height: 10px;
+    width: 10px;
+    background-color: #42FF33;
+    border-radius: 50%;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.inactive-dot
+{
+    height: 10px;
+    width: 10px;
+    background-color: #E81C1C;
+    border-radius: 50%;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+th
+{
+    background-color: rgba(174, 164, 209, .6);
+    color: black;
+}
+
+tr:nth-of-type(even)
+{
+    background-color: rgba(255, 255, 255, .6);
+}
+
+.table-striped
+{
+    background-color: rgba(109, 209, 246, .8);
+    color: black;
+}
