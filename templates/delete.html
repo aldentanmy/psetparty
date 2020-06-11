@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Calendar
+{% endblock %}
+
+{% block main %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" href="/classhomepage/{{ classname }}">Students</a></li>
+        <li class="nav-item"><a class="nav-link" href="/classcalendar/{{ classname }}">Calendar</a></li>
+        <li class="nav-item"><a class="nav-link" href="/classupdate/{{ classname }}">Update Availability</a></li>
+    </ul>
+{% endblock %}

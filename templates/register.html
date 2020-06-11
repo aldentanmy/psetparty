@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="post" id="form">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" id="username" placeholder="Create Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Create Password" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="confirmation" placeholder="Password (again)" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="email" placeholder="Email" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="hp" placeholder="Cell Phone" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+    <script>
+
+        /* Client-side validation to check if all fields have been filled in */
+        document.querySelector('form').onsubmit = function(form)
+        {
+            /* Print alert message if username field is empty */
+            if (!document.querySelector('input[name=username]').value)
+            {
+                alert('You must create a username!');
+                return false;
+            }
+
+            /* Print alert message if password field is empty */
+            if (!document.querySelector('input[name=password]').value)
+            {
+                alert('You must enter a password!');
+                return false;
+            }
+
+            /* Print alert message if confirmation field is empty */
+            if (!document.querySelector('input[name=confirmation]').value)
+            {
+                alert('You must retype your password!');
+                return false;
+            }
+
+            /* Print alert message if passwords do not match */
+            if (document.querySelector('input[name=password]').value != document.querySelector('input[name=confirmation]').value)
+            {
+                alert('Your passwords do not match!');
+                return false;
+            }
+
+            /* Print alert message if email field is empty */
+            if (!document.querySelector('input[name=email]').value)
+            {
+                alert('You must provide your email!');
+                return false;
+            }
+
+            form.preventDefault();
+
+            $.get("/check", {username: document.getElementById('username').value}, function(response)
+            {
+                if (response == true)
+                {
+                    document.getElementById("form").submit();
+                }
+                else
+                {
+                    alert('Username has already been taken.');
+                }
+            });
+        };
+
+    </script>
+
+{% endblock %}

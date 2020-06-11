@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Calendar
+{% endblock %}
+
+{% block main %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" href="/classhomepage/{{ classname }}">Students</a></li>
+        <li class="nav-item"><a class="nav-link" href="/classcalendar/{{ classname }}">Calendar</a></li>
+        {% if check == 1 %}
+            <li class="nav-item"><a class="nav-link" href="/classupdate/{{ classname }}">Update Availability</a></li>
+        {% endif %}
+    </ul>
+
+    <form action="/classupdate/{{ classname }}" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="date" placeholder="Date" input type="date">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="time" placeholder="Time" input type="time">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="location" placeholder="Location" input type="text">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="notes" placeholder="Notes" input type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+
+     <script>
+
+        /* Execute function for client-side validation when submit button is clicked */
+        document.querySelector('form').onsubmit = function()
+        {
+            /* Print alert message if date field is empty */
+            if (!document.querySelector('input[name=date]').value)
+            {
+                alert('You must provide a date!');
+                return false;
+            }
+
+            /* Print alert message if time field is empty */
+            if (!document.querySelector('input[name=time]').value)
+            {
+                alert('You must provide a time!');
+                return false;
+            }
+
+            /* Print alert message if location field is empty */
+            if (!document.querySelector('input[name=location]').value)
+            {
+                alert('You must provide a location!');
+                return false;
+            }
+
+            return true;
+        };
+
+    </script>
+{% endblock %}

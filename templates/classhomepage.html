@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Homepage
+{% endblock %}
+
+{% block main %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" href="/classhomepage/{{ classname }}">Students</a></li>
+        <li class="nav-item"><a class="nav-link" href="/classcalendar/{{ classname }}">Calendar</a></li>
+        {% if check == 1 %}
+            <li class="nav-item"><a class="nav-link" href="/classupdate/{{ classname }}">Update Availability</a></li>
+        {% endif %}
+    </ul>
+
+    <h1>{{ classname }}</h1>
+
+    {% if check == 0 %}
+        <a href="/addclass/{{ classname }}" id="addclassbutton"><button class="btn btn-primary float-center">Add {{classname}}</button></a>
+    {% endif %}
+
+    <p></p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for student in students %}
+
+            <tr>
+                <td><a href="/friend/{{ student["user_id"] }}">{{ student["username"] }}</a></td>
+                <td>{{ student["email"] }}</td>
+                <td>{{ student["hp"] }}</td>
+            </tr>
+
+            {% endfor %}
+
+    </table>
+
+{% endblock %}

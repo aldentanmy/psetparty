@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Email
+{% endblock %}
+
+{% block main %}
+
+    <form action="/email" method="post" name="form">
+        <div class="form-group">
+            <input class="form-control" type="text" name="subject" placeholder="Subject">
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="5" name="message" placeholder="Message"></textarea>
+        </div>
+        <button class="btn btn-primary" value="{{user_id}}" type="submit" name="email_btn">Send Email</button>
+    </form>
+
+    <script>
+
+        document.querySelector('form').onsubmit = function()
+        {
+            if (!document.querySelector('input').value)
+            {
+                alert("You must fill in the subject head!");
+                return false;
+            }
+
+            if (!document.querySelector('textarea').value)
+            {
+                alert("You must fill in a message!");
+                return false;
+            }
+        }
+    </script>
+
+{% endblock %}

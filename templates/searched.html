@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search Classes
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Class Name</th>
+                <th scope="col">Add Class</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for class in classes %}
+
+            <tr>
+                <td><a href="/classhomepage/{{ class.classname }}">{{ class.classname }}</a></td>
+                <td><a href="/addclass/{{ class.classname }}"><button class="btn btn-primary">Add {{ class.classname}}</button></td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

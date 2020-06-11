@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Calendar
+{% endblock %}
+
+{% block main %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" href="/classhomepage/{{ classname }}">Students</a></li>
+        <li class="nav-item"><a class="nav-link" href="/classcalendar/{{ classname }}">Calendar</a></li>
+        {% if check == 1 %}
+            <li class="nav-item"><a class="nav-link" href="/classupdate/{{ classname }}">Update Availability</a></li>
+        {% endif %}
+    </ul>
+
+    <h1>{{ classname }}</h1>
+
+    {% if check == 0 %}
+        <a href="/addclass/{{ classname }}" id="addclassbutton"><button class="btn btn-primary float-center">Add {{classname}}</button></a>
+    {% endif %}
+
+    <p></p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Location</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Change Status</th>
+                <th scope="col">Delete Entry</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>
+
+                    {% if student["active"] == 0 %}
+                        <span class="inactive-dot"></span>
+                    {% endif %}
+
+                    {% if student["active"] == 1 %}
+                        <span class="active-dot"></span>
+                    {% endif %}
+
+                    <a href="/friend/{{student["user_id"]}}">{{student["username"]}}</a>
+
+                </td>
+                <td>{{student["date"]}} ({{student["date"]|change_day}})</td>
+                <td>{{student["time"]}}</td>
+                <td>{{student["location"]}}</td>
+                <td>{{student["notes"]}}</td>
+                <td>
+
+                    {% if (user_id == student["user_id"]) %}
+
+                        {% if ((student["date"]|checkdate) == true) %}
+
+                            {% if student["active"] == 0 %}
+                                <form action="/pset_on/{{ classname }}" method="post">
+                                    <button class="btn btn-primary" type="submit" name="on_btn" value="{{student["id"]}}">Pset On</button>
+                                </form>
+                            {% else %}
+                                <form action="/pset_off/{{ classname }}" method="post">
+                                    <button class="btn btn-primary" type="submit" name="off_btn" value="{{student["id"]}}">Pset Off</button>
+                                </form>
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% endif %}
+
+                </td>
+                <td>
+
+                    {% if (user_id == student["user_id"]) %}
+
+                        <form action="/deleteupdate/{{ classname }}/{{ student["id"] }}" method="post">
+                            <button class="btn btn-primary" type="submit" value="{{student["id"]}}">Delete</button>
+                        </form>
+
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+
+    </table>
+
+{% endblock %}

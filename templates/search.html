@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search Classes
+{% endblock %}
+
+{% block main %}
+
+    <p>
+        Please search for the department (eg. "CPSC") or class code without spacing (eg. "CPSC100", not "CPSC 100").
+    </p>
+    <form action="/search" method="post">
+        <div class="form-group">
+            <input class="form-control" name="classname" placeholder="Class Code" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Search Class</button>
+    </form>
+
+{% endblock %}
